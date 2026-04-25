@@ -51,8 +51,6 @@ local({
 
   plt_dir <- rk.XML.browser("Output Directory (For Individual Files)", type = "dir", required = FALSE, id.name = "plt_dir")
   plt_file <- rk.XML.browser("Output File (For Combined Document, e.g. plots.pptx)", type = "savefile", required = FALSE, id.name = "plt_file")
-
-  # NUEVO: Checkbox para asegurar la extensión
   plt_auto_ext <- rk.XML.cbox("Automatically append extension to file name if missing", value = "TRUE", chk = TRUE, id.name = "plt_auto_ext")
 
   plt_ind_fmt <- rk.XML.dropdown("Format for Individual Files", options = list("SVG" = list(val = "svg", chk=TRUE), "PNG" = list(val = "png"), "PDF" = list(val = "pdf")), id.name = "plt_ind_fmt")
@@ -80,7 +78,7 @@ local({
 
       rk.XML.connect(governor = is_comb_plt, client = "plt_file.enabled"),
       rk.XML.connect(governor = is_comb_plt, client = "plt_file.required"),
-      rk.XML.connect(governor = is_comb_plt, client = "plt_auto_ext.enabled"), # Checkbox dependiente de combinado
+      rk.XML.connect(governor = is_comb_plt, client = "plt_auto_ext.enabled"),
       rk.XML.connect(governor = is_comb_plt, client = "plt_comb_fmt.enabled"),
       rk.XML.connect(governor = is_comb_plt, client = "plt_orient.enabled")
   )
@@ -116,7 +114,6 @@ local({
     } else {
         echo('if (\"' + out_file + '\" == \"\") stop(\"Error: Output File is required.\")\\n');
 
-        // CORRECCIÓN: Usamos la variable nativa de R `out_file` y verificamos la extensión dinámicamente
         echo('out_file <- \"' + out_file + '\"\\n');
         if (auto_ext) {
             echo('ext_pattern <- paste0(\"\\\\\\\\.\", \"' + comb_fmt + '\", \"$\")\\n');
@@ -137,7 +134,7 @@ local({
             echo('}\\n');
             echo('sect_prop <- officer::prop_section(page_size = officer::page_size(orient = \"' + orient + '\"))\\n');
             echo('doc <- officer::body_set_default_section(doc, sect_prop)\\n');
-            echo('print(doc, target = out_file)\\n'); // Pasamos out_file como variable R, no como string
+            echo('print(doc, target = out_file)\\n');
             echo('res_msg <- paste(\"Combined Word exported to:\", out_file)\\n');
         } else if (comb_fmt == 'pptx') {
             echo('require(officer)\\n');
@@ -147,7 +144,7 @@ local({
             echo('  doc <- officer::ph_with(doc, value = names(target_obj)[i], location = officer::ph_location_type(type = \"title\"))\\n');
             echo('  doc <- officer::ph_with(doc, value = target_obj[[i]], location = officer::ph_location_type(type = \"body\"))\\n');
             echo('}\\n');
-            echo('print(doc, target = out_file)\\n'); // Pasamos out_file como variable R
+            echo('print(doc, target = out_file)\\n');
             echo('res_msg <- paste(\"Combined PowerPoint exported to:\", out_file)\\n');
         }
     }
@@ -176,8 +173,6 @@ local({
 
   tbl_dir <- rk.XML.browser("Output Directory (For Individual Files)", type = "dir", required = FALSE, id.name = "tbl_dir")
   tbl_file <- rk.XML.browser("Output File (For Combined Document, e.g. tables.docx)", type = "savefile", required = FALSE, id.name = "tbl_file")
-
-  # NUEVO: Checkbox para asegurar la extensión en Tablas
   tbl_auto_ext <- rk.XML.cbox("Automatically append extension to file name if missing", value = "TRUE", chk = TRUE, id.name = "tbl_auto_ext")
 
   tbl_ind_fmt <- rk.XML.dropdown("Format for Individual Files", options = list("Word (.docx)" = list(val = "docx", chk=TRUE), "PowerPoint (.pptx)" = list(val = "pptx"), "HTML (.html)" = list(val = "html")), id.name = "tbl_ind_fmt")
@@ -201,7 +196,7 @@ local({
 
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_file.enabled"),
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_file.required"),
-      rk.XML.connect(governor = is_comb_tbl, client = "tbl_auto_ext.enabled"), # Checkbox
+      rk.XML.connect(governor = is_comb_tbl, client = "tbl_auto_ext.enabled"),
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_comb_fmt.enabled"),
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_orient.enabled")
   )
@@ -242,18 +237,26 @@ local({
         echo('if (\"' + out_file + '\" == \"\") stop(\"Error: Output File is required.\")\\n');
         echo('require(flextable)\\nrequire(officer)\\n');
 
-        // CORRECCIÓN para Tablas
         echo('out_file <- \"' + out_file + '\"\\n');
         if (auto_ext) {
             echo('ext_pattern <- paste0(\"\\\\\\\\.\", \"' + fmt + '\", \"$\")\\n');
             echo('if (!grepl(ext_pattern, out_file, ignore.case = TRUE)) out_file <- paste0(out_file, \".\", \"' + fmt + '\")\\n');
         }
 
+        // LÓGICA MEJORADA: Un bucle iterativo para colocar saltos de página
         if (fmt == 'docx') {
+            echo('doc <- officer::read_docx()\\n');
+            echo('for (i in seq_along(target_obj)) {\\n');
+            echo('  doc <- flextable::body_add_flextable(doc, value = target_obj[[i]])\\n');
+            echo('  if (i < length(target_obj)) doc <- officer::body_add_break(doc)\\n');
+            echo('}\\n');
             echo('sect_prop <- officer::prop_section(page_size = officer::page_size(orient = \"' + orient + '\"))\\n');
-            echo('do.call(flextable::save_as_docx, c(target_obj, list(path = out_file, pr_section = sect_prop)))\\n');
+            echo('doc <- officer::body_set_default_section(doc, sect_prop)\\n');
+            echo('print(doc, target = out_file)\\n');
             echo('res_msg <- paste(\"Combined Word exported to:\", out_file)\\n');
+
         } else if (fmt == 'pptx') {
+            // PowerPoint automáticamente crea una diapositiva por tabla con save_as_pptx
             echo('do.call(flextable::save_as_pptx, c(target_obj, list(path = out_file)))\\n');
             echo('res_msg <- paste(\"Combined PowerPoint exported to:\", out_file)\\n');
         }
@@ -285,5 +288,5 @@ local({
     show = FALSE
   )
 
-  cat("\nPlugin 'rk.exporter' generado con éxito. Bug de extensión solucionado.\n")
+  cat("\nPlugin 'rk.exporter' generado con éxito.\n")
 })
