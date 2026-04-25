@@ -1,0 +1,124 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: rk.exporter 0.0.1\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Batch Exporters"
+msgstr "Exportateurs par Lots"
+
+msgid "Batch Plot Exporter"
+msgstr "Exportateur de Graphiques par Lots"
+
+msgid "Batch Table Exporter"
+msgstr "Exportateur de Tableaux par Lots"
+
+msgid "Exporta una lista de gráficos (ggplot2) a archivos individuales o a un documento combinado (PDF, Word, PPTX)."
+msgstr "Exporte une liste de graphiques (ggplot2) vers des fichiers individuels ou un document combiné (PDF, Word, PPTX)."
+
+msgid "Exporta una lista de tablas (flextable) a archivos individuales o a un documento combinado (Word, PPTX)."
+msgstr "Exporte une liste de tableaux (flextable) vers des fichiers individuels ou un document combiné (Word, PPTX)."
+
+msgid "Target object (List of ggplot2 objects or single ggplot)"
+msgstr "Objet cible (Liste d'objets ggplot2 ou un seul ggplot)"
+
+msgid "Target object (List of flextables or single flextable)"
+msgstr "Objet cible (Liste de flextables ou un seul flextable)"
+
+msgid "Export Mode"
+msgstr "Mode d'Exportation"
+
+msgid "Individual Files (e.g. plot_1.svg, plot_2.svg)"
+msgstr "Fichiers Individuels (ex. plot_1.svg, plot_2.svg)"
+
+msgid "Combined Document (1 plot per page/slide)"
+msgstr "Document Combiné (1 graphique par page/diapositive)"
+
+msgid "Individual Files (e.g. table_1.docx, table_2.docx)"
+msgstr "Fichiers Individuels (ex. table_1.docx, table_2.docx)"
+
+msgid "Combined Document (1 table per page/slide)"
+msgstr "Document Combiné (1 tableau par page/diapositive)"
+
+msgid "Output Directory (For Individual Files)"
+msgstr "Répertoire de Sortie (Pour Fichiers Individuels)"
+
+msgid "Output File (For Combined Document, e.g. plots.pptx)"
+msgstr "Fichier de Sortie (Pour Document Combiné, ex. plots.pptx)"
+
+msgid "Output File (For Combined Document, e.g. tables.docx)"
+msgstr "Fichier de Sortie (Pour Document Combiné, ex. tables.docx)"
+
+msgid "Automatically append extension to file name if missing"
+msgstr "Ajouter automatiquement l'extension au nom du fichier si manquante"
+
+msgid "Format for Individual Files"
+msgstr "Format pour Fichiers Individuels"
+
+msgid "Format for Combined Document"
+msgstr "Format pour Document Combiné"
+
+msgid "SVG"
+msgstr "SVG"
+
+msgid "PNG"
+msgstr "PNG"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "PowerPoint (.pptx)"
+msgstr "PowerPoint (.pptx)"
+
+msgid "Word (.docx)"
+msgstr "Word (.docx)"
+
+msgid "PDF (.pdf)"
+msgstr "PDF (.pdf)"
+
+msgid "HTML (.html)"
+msgstr "HTML (.html)"
+
+msgid "Width (inches)"
+msgstr "Largeur (pouces)"
+
+msgid "Height (inches)"
+msgstr "Hauteur (pouces)"
+
+msgid "Resolution (DPI) (For PNGs)"
+msgstr "Résolution (DPI) (Pour PNGs)"
+
+msgid "Page Orientation (For Word/PDF)"
+msgstr "Orientation de la Page (Pour Word/PDF)"
+
+msgid "Word Page Orientation"
+msgstr "Orientation de la Page Word"
+
+msgid "Landscape"
+msgstr "Paysage"
+
+msgid "Portrait"
+msgstr "Portrait"
+
+msgid "Destination Paths"
+msgstr "Chemins de Destination"
+
+msgid "Format Settings"
+msgstr "Paramètres de Format"
+
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgid "Input & Mode"
+msgstr "Entrée et Mode"
+
+msgid "Export Settings"
+msgstr "Paramètres d'Exportation"
+
+msgid "Batch Plot Export Results"
+msgstr "Résultats d'Exportation de Graphiques par Lots"
+
+msgid "Batch Table Export Results"
+msgstr "Résultats d'Exportation de Tableaux par Lots"

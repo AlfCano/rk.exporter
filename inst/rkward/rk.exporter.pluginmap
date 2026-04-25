@@ -1,0 +1,97 @@
+<!DOCTYPE
+	rkpluginmap
+>
+<document
+	base_prefix=""
+	namespace="BatchPlotExporter"
+	id="BatchPlotExporter_rkward"
+	po_id="BatchPlotExporter_rkward"
+	priority="medium"
+>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<about
+		name="rk.exporter"
+		shortinfo="RKWard Plugin Suite for Batch Exporting lists of ggplot2 and flextable objects to individual files or combined Office documents (PDF, Word, PPTX)."
+		longinfo="RKWard Plugin Suite for Batch Exporting lists of ggplot2 and flextable objects to individual files or combined Office documents (PDF, Word, PPTX)."
+		version="0.0.1"
+		releasedate="2026-04-25"
+		url="https://github.com/AlfCano/rk.exporter"
+		license="GPL (&gt;= 3)"
+	>
+		<author
+			given="Alfonso"
+			family="Cano Robles"
+			email="alfonso.cano@correo.buap.mx"
+			role="aut, cre"
+		/>
+	</about>
+	<require
+		map="rkward::menu"
+	/>
+	<require
+		map="rkward::embedded"
+	/>
+	<components>
+		<component
+			id="cmp_BtchPltExprtrBtchTblExprt"
+			label="Batch Table Exporter"
+			type="standard"
+			file="plugins/BatchTableExporter.xml"
+		>
+		</component>
+		<component
+			id="cmp_BtchPltExprtrBtchPltExprt"
+			label="Batch Plot Exporter"
+			type="standard"
+			file="plugins/BatchPlotExporter.xml"
+		>
+		</component>
+	</components>
+	<hierarchy>
+		<menu
+			id="file"
+			label="File"
+		>
+			<menu
+				id="BatchExporters"
+				label="Batch Exporters"
+			>
+				<entry
+					component="cmp_BtchPltExprtrBtchTblExprt"
+				/>
+			</menu>
+		</menu>
+		<menu
+			id="file"
+			label="File"
+		>
+			<menu
+				id="BatchExporters"
+				label="Batch Exporters"
+			>
+				<entry
+					component="cmp_BtchPltExprtrBtchPltExprt"
+				/>
+			</menu>
+		</menu>
+	</hierarchy>
+	<!--
+		<context
+			id="x11"
+		>
+		</context>
+	-->
+	<!--
+		<context
+			id="import"
+		>
+		</context>
+	-->
+</document>

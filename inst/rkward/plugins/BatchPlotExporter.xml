@@ -1,0 +1,73 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="BatchPlotExporter.js" />
+	<help file="BatchPlotExporter.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<convert id="is_ind_plt" sources="plt_mode.string" mode="equals" standard="ind" />
+		<convert id="is_comb_plt" sources="plt_mode.string" mode="equals" standard="comb" />
+		<connect governor="is_ind_plt" client="plt_dir.enabled.enabled" />
+		<connect governor="is_ind_plt" client="plt_dir.required.enabled" />
+		<connect governor="is_ind_plt" client="plt_ind_fmt.enabled.enabled" />
+		<connect governor="is_comb_plt" client="plt_file.enabled.enabled" />
+		<connect governor="is_comb_plt" client="plt_file.required.enabled" />
+		<connect governor="is_comb_plt" client="plt_auto_ext.enabled.enabled" />
+		<connect governor="is_comb_plt" client="plt_comb_fmt.enabled.enabled" />
+		<connect governor="is_comb_plt" client="plt_orient.enabled.enabled" />
+	</logic>
+	<dialog label="Batch Plot Exporter">
+		<tabbook>
+			<tab label="Input &amp; Mode" id="tab_InputMod">
+				<row id="row_vTL2EMIF12">
+					<varselector id="var_sel_plt" />
+					<column id="clm_vTL2EMIF12">
+						<varslot id="plt_list" label="Target object (List of ggplot2 objects or single ggplot)" source="var_sel_plt" required="true" />
+						<radio id="plt_mode" label="Export Mode">
+							<option label="Individual Files (e.g. plot_1.svg, plot_2.svg)" value="ind" checked="true" />
+							<option label="Combined Document (1 plot per page/slide)" value="comb" />
+						</radio>
+						<frame label="Destination Paths" id="frm_DstntnPt">
+							<browser label="Output Directory (For Individual Files)" type="dir" id="plt_dir" required="false" />
+							<browser label="Output File (For Combined Document, e.g. plots.pptx)" type="savefile" id="plt_file" required="false" />
+							<checkbox id="plt_auto_ext" label="Automatically append extension to file name if missing" value="TRUE" checked="true" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+			<tab label="Export Settings" id="tab_ExprtStt">
+				<column id="clm_fFSFSFIFSV">
+					<frame label="Format Settings" id="frm_FrmtSttn">
+						<dropdown id="plt_ind_fmt" label="Format for Individual Files">
+							<option label="SVG" value="svg" checked="true" />
+							<option label="PNG" value="png" />
+							<option label="PDF" value="pdf" />
+						</dropdown>
+						<dropdown id="plt_comb_fmt" label="Format for Combined Document">
+							<option label="PowerPoint (.pptx)" value="pptx" checked="true" />
+							<option label="Word (.docx)" value="docx" />
+							<option label="PDF (.pdf)" value="pdf" />
+						</dropdown>
+						<dropdown id="plt_orient" label="Page Orientation (For Word/PDF)">
+							<option label="Landscape" value="landscape" checked="true" />
+							<option label="Portrait" value="portrait" />
+						</dropdown>
+					</frame>
+					<frame label="Dimensions" id="frm_Dimensns">
+						<row id="row_sW10130H61">
+							<spinbox label="Width (inches)" id="plt_w" initial="10" min="1" max="30" />
+							<spinbox label="Height (inches)" id="plt_h" initial="6" min="1" max="30" />
+						</row>
+						<spinbox label="Resolution (DPI) (For PNGs)" id="plt_dpi" initial="300" min="50" max="600" />
+					</frame>
+				</column>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>

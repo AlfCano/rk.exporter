@@ -1,0 +1,59 @@
+<!DOCTYPE rkhelp >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<title>
+		Batch Plot Exporter
+	</title>
+	<summary>
+	</summary>
+	<usage>
+	</usage>
+	<!--
+		<section id="sct_EDITORDE" title="EDIT OR DELETE ME">
+			EDIT OR DELETE ME
+		</section>
+	-->
+	<settings>
+		<caption id="tab_InputMod" />
+		<setting id="plt_list">
+		</setting>
+		<setting id="plt_mode">
+		</setting>
+		<caption id="frm_DstntnPt" />
+		<setting id="plt_dir">
+		</setting>
+		<setting id="plt_file">
+		</setting>
+		<setting id="plt_auto_ext">
+		</setting>
+		<caption id="tab_ExprtStt" />
+		<caption id="frm_FrmtSttn" />
+		<setting id="plt_ind_fmt">
+		</setting>
+		<setting id="plt_comb_fmt">
+		</setting>
+		<setting id="plt_orient">
+		</setting>
+		<caption id="frm_Dimensns" />
+		<setting id="plt_w">
+		</setting>
+		<setting id="plt_h">
+		</setting>
+		<setting id="plt_dpi">
+		</setting>
+	</settings>
+	<!--
+		<related>
+			<ul>
+				<li>
+					<link href="rkward://rhelp/..." />
+				</li>
+			</ul>
+		</related>
+	-->
+	<technical>
+	</technical>
+</document>

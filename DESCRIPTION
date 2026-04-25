@@ -1,0 +1,19 @@
+Package: rk.exporter
+Type: Package
+Title: RKWard Plugin Suite for Batch Exporting lists of ggplot2 and
+        flextable objects to individual files or combined Office
+        documents (PDF, Word, PPTX).
+Version: 0.0.1
+Date: 2026-04-25
+Author: Alfonso Cano Robles
+Maintainer: Alfonso Cano Robles <alfonso.cano@correo.buap.mx>
+Enhances: rkward
+Description: RKWard Plugin Suite for Batch Exporting lists of ggplot2
+        and flextable objects to individual files or combined Office
+        documents (PDF, Word, PPTX).
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyLoad: yes
+URL: https://github.com/AlfCano/rk.exporter
+Authors@R: person(given="Alfonso", family="Cano Robles",
+        email="alfonso.cano@correo.buap.mx", role=c("aut", "cre"))

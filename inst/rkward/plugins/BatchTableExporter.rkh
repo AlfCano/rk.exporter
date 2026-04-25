@@ -1,0 +1,52 @@
+<!DOCTYPE rkhelp >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<title>
+		Batch Table Exporter
+	</title>
+	<summary>
+	</summary>
+	<usage>
+	</usage>
+	<!--
+		<section id="sct_EDITORDE" title="EDIT OR DELETE ME">
+			EDIT OR DELETE ME
+		</section>
+	-->
+	<settings>
+		<caption id="tab_InputMod" />
+		<setting id="tbl_list">
+		</setting>
+		<setting id="tbl_mode">
+		</setting>
+		<caption id="frm_DstntnPt" />
+		<setting id="tbl_dir">
+		</setting>
+		<setting id="tbl_file">
+		</setting>
+		<setting id="tbl_auto_ext">
+		</setting>
+		<caption id="tab_ExprtStt" />
+		<caption id="frm_FrmtSttn" />
+		<setting id="tbl_ind_fmt">
+		</setting>
+		<setting id="tbl_comb_fmt">
+		</setting>
+		<setting id="tbl_orient">
+		</setting>
+	</settings>
+	<!--
+		<related>
+			<ul>
+				<li>
+					<link href="rkward://rhelp/..." />
+				</li>
+			</ul>
+		</related>
+	-->
+	<technical>
+	</technical>
+</document>

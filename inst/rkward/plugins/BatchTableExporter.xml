@@ -1,0 +1,65 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="BatchTableExporter.js" />
+	<help file="BatchTableExporter.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<convert id="is_ind_tbl" sources="tbl_mode.string" mode="equals" standard="ind" />
+		<convert id="is_comb_tbl" sources="tbl_mode.string" mode="equals" standard="comb" />
+		<connect governor="is_ind_tbl" client="tbl_dir.enabled.enabled" />
+		<connect governor="is_ind_tbl" client="tbl_dir.required.enabled" />
+		<connect governor="is_ind_tbl" client="tbl_ind_fmt.enabled.enabled" />
+		<connect governor="is_comb_tbl" client="tbl_file.enabled.enabled" />
+		<connect governor="is_comb_tbl" client="tbl_file.required.enabled" />
+		<connect governor="is_comb_tbl" client="tbl_auto_ext.enabled.enabled" />
+		<connect governor="is_comb_tbl" client="tbl_comb_fmt.enabled.enabled" />
+		<connect governor="is_comb_tbl" client="tbl_orient.enabled.enabled" />
+	</logic>
+	<dialog label="Batch Table Exporter">
+		<tabbook>
+			<tab label="Input &amp; Mode" id="tab_InputMod">
+				<row id="row_vTLEMIF12C">
+					<varselector id="var_sel_tbl" />
+					<column id="clm_vTLEMIF12C">
+						<varslot id="tbl_list" label="Target object (List of flextables or single flextable)" source="var_sel_tbl" required="true" />
+						<radio id="tbl_mode" label="Export Mode">
+							<option label="Individual Files (e.g. table_1.docx, table_2.docx)" value="ind" checked="true" />
+							<option label="Combined Document (1 table per page/slide)" value="comb" />
+						</radio>
+						<frame label="Destination Paths" id="frm_DstntnPt">
+							<browser label="Output Directory (For Individual Files)" type="dir" id="tbl_dir" required="false" />
+							<browser label="Output File (For Combined Document, e.g. tables.docx)" type="savefile" id="tbl_file" required="false" />
+							<checkbox id="tbl_auto_ext" label="Automatically append extension to file name if missing" value="TRUE" checked="true" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+			<tab label="Export Settings" id="tab_ExprtStt">
+				<column id="clm_fFSFSFIFWP">
+					<frame label="Format Settings" id="frm_FrmtSttn">
+						<dropdown id="tbl_ind_fmt" label="Format for Individual Files">
+							<option label="Word (.docx)" value="docx" checked="true" />
+							<option label="PowerPoint (.pptx)" value="pptx" />
+							<option label="HTML (.html)" value="html" />
+						</dropdown>
+						<dropdown id="tbl_comb_fmt" label="Format for Combined Document">
+							<option label="Word (.docx)" value="docx" checked="true" />
+							<option label="PowerPoint (.pptx)" value="pptx" />
+						</dropdown>
+						<dropdown id="tbl_orient" label="Word Page Orientation">
+							<option label="Landscape" value="landscape" checked="true" />
+							<option label="Portrait" value="portrait" />
+						</dropdown>
+					</frame>
+				</column>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>
