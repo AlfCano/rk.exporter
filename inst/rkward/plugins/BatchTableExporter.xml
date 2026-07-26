@@ -21,12 +21,18 @@
 		<connect governor="is_comb_tbl" client="tbl_auto_ext.enabled.enabled" />
 		<connect governor="is_comb_tbl" client="tbl_comb_fmt.enabled.enabled" />
 		<connect governor="is_comb_tbl" client="tbl_orient.enabled.enabled" />
+		<connect governor="tbl_use_dict.state.state" client="tbl_dict_df.enabled.enabled" />
+		<connect governor="tbl_use_dict.state.state" client="tbl_dict_key.enabled.enabled" />
+		<connect governor="tbl_use_dict.state.state" client="tbl_dict_val.enabled.enabled" />
+		<connect governor="tbl_use_dict.state.state" client="tbl_dict_df.required.enabled" />
+		<connect governor="tbl_use_dict.state.state" client="tbl_dict_key.required.enabled" />
+		<connect governor="tbl_use_dict.state.state" client="tbl_dict_val.required.enabled" />
 	</logic>
 	<dialog label="Batch Table Exporter">
-		<tabbook>
-			<tab label="Input &amp; Mode" id="tab_InputMod">
-				<row id="row_vTLEMIF12C">
-					<varselector id="var_sel_tbl" />
+		<row id="row_vIMIMTLEMI">
+			<varselector id="var_sel_tbl" />
+			<tabbook>
+				<tab label="Input &amp; Mode" id="tab_InputMod">
 					<column id="clm_vTLEMIF12C">
 						<varslot id="tbl_list" label="Target object (List of flextables or single flextable)" source="var_sel_tbl" required="true" />
 						<radio id="tbl_mode" label="Export Mode">
@@ -38,28 +44,46 @@
 							<browser label="Output File (For Combined Document, e.g. tables.docx)" type="savefile" id="tbl_file" required="false" />
 							<checkbox id="tbl_auto_ext" label="Automatically append extension to file name if missing" value="TRUE" checked="true" />
 						</frame>
+						<stretch />
 					</column>
-				</row>
-			</tab>
-			<tab label="Export Settings" id="tab_ExprtStt">
-				<column id="clm_fFSFSFIFWP">
-					<frame label="Format Settings" id="frm_FrmtSttn">
-						<dropdown id="tbl_ind_fmt" label="Format for Individual Files">
-							<option label="Word (.docx)" value="docx" checked="true" />
-							<option label="PowerPoint (.pptx)" value="pptx" />
-							<option label="HTML (.html)" value="html" />
-						</dropdown>
-						<dropdown id="tbl_comb_fmt" label="Format for Combined Document">
-							<option label="Word (.docx)" value="docx" checked="true" />
-							<option label="PowerPoint (.pptx)" value="pptx" />
-						</dropdown>
-						<dropdown id="tbl_orient" label="Word Page Orientation">
-							<option label="Landscape" value="landscape" checked="true" />
-							<option label="Portrait" value="portrait" />
-						</dropdown>
-					</frame>
-				</column>
-			</tab>
-		</tabbook>
+				</tab>
+				<tab label="Naming Strategy" id="tab_NmngStrt">
+					<column id="clm_fDNDNPTUDD">
+						<frame label="Dictionary Naming" id="frm_DctnryNm">
+							<input label="Prefix for unnamed objects (e.g., Table_, tbl_)" id="tbl_prefix" initial="table_" />
+							<checkbox id="tbl_use_dict" label="Use Dictionary data.frame to rename files" value="true" />
+							<row id="row_vDDFCONKCD">
+								<varslot id="tbl_dict_df" label="Dictionary Data.Frame" source="var_sel_tbl" classes="data.frame" required="true" />
+								<column id="clm_vrCONKCDFN">
+									<varslot id="tbl_dict_key" label="Column: Object Names (Keys)" source="var_sel_tbl" required="true" />
+									<varslot id="tbl_dict_val" label="Column: Desired File Names" source="var_sel_tbl" required="true" />
+								</column>
+							</row>
+						</frame>
+						<stretch />
+					</column>
+				</tab>
+				<tab label="Export Settings" id="tab_ExprtStt">
+					<column id="clm_fFSFSFIFWP">
+						<frame label="Format Settings" id="frm_FrmtSttn">
+							<dropdown id="tbl_ind_fmt" label="Format for Individual Files">
+								<option label="Word (.docx)" value="docx" checked="true" />
+								<option label="PowerPoint (.pptx)" value="pptx" />
+								<option label="HTML (.html)" value="html" />
+							</dropdown>
+							<dropdown id="tbl_comb_fmt" label="Format for Combined Document">
+								<option label="Word (.docx)" value="docx" checked="true" />
+								<option label="PowerPoint (.pptx)" value="pptx" />
+							</dropdown>
+							<dropdown id="tbl_orient" label="Word Page Orientation">
+								<option label="Landscape" value="landscape" checked="true" />
+								<option label="Portrait" value="portrait" />
+							</dropdown>
+						</frame>
+						<stretch />
+					</column>
+				</tab>
+			</tabbook>
+		</row>
 	</dialog>
 </document>

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: rk.exporter 0.0.1\n"
+"Project-Id-Version: rk.exporter 0.0.2\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -122,3 +122,27 @@ msgstr "Résultats d'Exportation de Graphiques par Lots"
 
 msgid "Batch Table Export Results"
 msgstr "Résultats d'Exportation de Tableaux par Lots"
+
+msgid "Naming Strategy"
+msgstr "Stratégie de nommage"
+
+msgid "Prefix for unnamed objects (e.g., Graph_, plot_)"
+msgstr "Préfixe pour les objets sans nom (ex., Graph_, plot_)"
+
+msgid "Use Dictionary data.frame to rename files"
+msgstr "Utiliser un data.frame Dictionnaire pour renommer les fichiers"
+
+msgid "Dictionary Data.Frame"
+msgstr "Data.Frame Dictionnaire"
+
+msgid "Column: Object Names (Keys)"
+msgstr "Colonne : Noms des objets (Clés)"
+
+msgid "Column: Desired File Names"
+msgstr "Colonne : Noms de fichiers souhaités"
+
+msgid "Dictionary Naming"
+msgstr "Nommage par Dictionnaire"
+
+msgid "Prefix for unnamed objects (e.g., Table_, tbl_)"
+msgstr "Préfixe pour les objets sans nom (ex., Table_, tbl_)"

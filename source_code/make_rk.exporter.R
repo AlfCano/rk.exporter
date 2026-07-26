@@ -1,6 +1,6 @@
 local({
   # =========================================================================================
-  # 1. Metadatos y Configuración
+  # 1. Metadata and Configuration
   # =========================================================================================
   require(rkwarddev)
   rkwarddev.required("0.10-3")
@@ -15,7 +15,7 @@ local({
     ),
     about = list(
       desc = "RKWard Plugin Suite for Batch Exporting lists of ggplot2 and flextable objects to individual files or combined Office documents (PDF, Word, PPTX).",
-      version = "0.0.1",
+      version = "0.0.2",
       url = "https://github.com/AlfCano/rk.exporter",
       license = "GPL (>= 3)"
     )
@@ -37,9 +37,9 @@ local({
   "
 
   # =========================================================================================
-  # COMPONENTE 1: Batch Plot Exporter (ggplot2)
+  # COMPONENT 1: Batch Plot Exporter (ggplot2)
   # =========================================================================================
-  help_plt <- rk.rkh.doc(title = rk.rkh.title("Batch Plot Exporter"), summary = rk.rkh.summary("Exporta una lista de gráficos (ggplot2) a archivos individuales o a un documento combinado (PDF, Word, PPTX)."))
+  help_plt <- rk.rkh.doc(title = rk.rkh.title("Batch Plot Exporter"), summary = rk.rkh.summary("Exports a list of ggplot2 objects to individual files or a combined document (PDF, Word, PPTX)."))
 
   var_sel_plt <- rk.XML.varselector(id.name = "var_sel_plt")
   plt_list <- rk.XML.varslot("Target object (List of ggplot2 objects or single ggplot)", source = var_sel_plt, required = TRUE, id.name = "plt_list")
@@ -53,6 +53,14 @@ local({
   plt_file <- rk.XML.browser("Output File (For Combined Document, e.g. plots.pptx)", type = "savefile", required = FALSE, id.name = "plt_file")
   plt_auto_ext <- rk.XML.cbox("Automatically append extension to file name if missing", value = "TRUE", chk = TRUE, id.name = "plt_auto_ext")
 
+  # --- NEW UI ELEMENTS FOR NAMING STRATEGY AND DICTIONARIES ---
+  plt_prefix <- rk.XML.input("Prefix for unnamed objects (e.g., Graph_, plot_)", initial = "plot_", id.name = "plt_prefix")
+
+  plt_use_dict <- rk.XML.cbox("Use Dictionary data.frame to rename files", value = "true", chk = FALSE, id.name = "plt_use_dict")
+  plt_dict_df <- rk.XML.varslot("Dictionary Data.Frame", source = var_sel_plt, required = TRUE, classes = "data.frame", id.name = "plt_dict_df")
+  plt_dict_key <- rk.XML.varslot("Column: Object Names (Keys)", source = var_sel_plt, required = TRUE, id.name = "plt_dict_key")
+  plt_dict_val <- rk.XML.varslot("Column: Desired File Names", source = var_sel_plt, required = TRUE, id.name = "plt_dict_val")
+
   plt_ind_fmt <- rk.XML.dropdown("Format for Individual Files", options = list("SVG" = list(val = "svg", chk=TRUE), "PNG" = list(val = "png"), "PDF" = list(val = "pdf")), id.name = "plt_ind_fmt")
   plt_comb_fmt <- rk.XML.dropdown("Format for Combined Document", options = list("PowerPoint (.pptx)" = list(val = "pptx", chk=TRUE), "Word (.docx)" = list(val = "docx"), "PDF (.pdf)" = list(val = "pdf")), id.name = "plt_comb_fmt")
 
@@ -61,10 +69,47 @@ local({
   plt_dpi <- rk.XML.spinbox("Resolution (DPI) (For PNGs)", min = 50, max = 600, initial = 300, id.name = "plt_dpi")
   plt_orient <- rk.XML.dropdown("Page Orientation (For Word/PDF)", options = list("Landscape" = list(val = "landscape", chk=TRUE), "Portrait" = list(val = "portrait")), id.name = "plt_orient")
 
-  tab_plt_in <- rk.XML.row(var_sel_plt, rk.XML.col(plt_list, plt_mode, rk.XML.frame(plt_dir, plt_file, plt_auto_ext, label="Destination Paths")))
-  tab_plt_opt <- rk.XML.col(rk.XML.frame(plt_ind_fmt, plt_comb_fmt, plt_orient, label="Format Settings"), rk.XML.frame(rk.XML.row(plt_w, plt_h), plt_dpi, label="Dimensions"))
+  # 1. Split content into THREE columns (Tabs)
 
-  dialog_plt <- rk.XML.dialog(label = "Batch Plot Exporter", child = rk.XML.tabbook(tabs = list("Input & Mode" = tab_plt_in, "Export Settings" = tab_plt_opt)))
+  # Tab 1: Input & Destination
+  tab_plt_in <- rk.XML.col(
+      plt_list,
+      plt_mode,
+      rk.XML.frame(plt_dir, plt_file, plt_auto_ext, label="Destination Paths"),
+      rk.XML.stretch() # Pushes elements upwards
+  )
+
+  # Tab 2: Naming Strategy
+  tab_plt_name <- rk.XML.col(
+      rk.XML.frame(
+        plt_prefix,
+        plt_use_dict,
+        rk.XML.row(plt_dict_df, rk.XML.col(plt_dict_key, plt_dict_val)),
+        label="Dictionary Naming"
+      ),
+      rk.XML.stretch()
+  )
+
+  # Tab 3: Export Settings
+  tab_plt_opt <- rk.XML.col(
+      rk.XML.frame(plt_ind_fmt, plt_comb_fmt, plt_orient, label="Format Settings"),
+      rk.XML.frame(rk.XML.row(plt_w, plt_h), plt_dpi, label="Dimensions"),
+      rk.XML.stretch()
+  )
+
+  # 2. Restructure Dialog
+  # Place var_sel_plt next to the tabbook so it is always visible on the left
+  dialog_plt <- rk.XML.dialog(
+      label = "Batch Plot Exporter",
+      child = rk.XML.row(
+          var_sel_plt,
+          rk.XML.tabbook(tabs = list(
+              "Input & Mode" = tab_plt_in,
+              "Naming Strategy" = tab_plt_name,
+              "Export Settings" = tab_plt_opt
+          ))
+      )
+  )
 
   is_ind_plt <- rk.XML.convert(sources = "plt_mode.string", mode = c(equals = "ind"), id.name = "is_ind_plt")
   is_comb_plt <- rk.XML.convert(sources = "plt_mode.string", mode = c(equals = "comb"), id.name = "is_comb_plt")
@@ -80,7 +125,13 @@ local({
       rk.XML.connect(governor = is_comb_plt, client = "plt_file.required"),
       rk.XML.connect(governor = is_comb_plt, client = "plt_auto_ext.enabled"),
       rk.XML.connect(governor = is_comb_plt, client = "plt_comb_fmt.enabled"),
-      rk.XML.connect(governor = is_comb_plt, client = "plt_orient.enabled")
+      rk.XML.connect(governor = is_comb_plt, client = "plt_orient.enabled"),
+      rk.XML.connect(governor = "plt_use_dict.state", client = "plt_dict_df.enabled"),
+      rk.XML.connect(governor = "plt_use_dict.state", client = "plt_dict_key.enabled"),
+      rk.XML.connect(governor = "plt_use_dict.state", client = "plt_dict_val.enabled"),
+      rk.XML.connect(governor = "plt_use_dict.state", client = "plt_dict_df.required"),
+      rk.XML.connect(governor = "plt_use_dict.state", client = "plt_dict_key.required"),
+      rk.XML.connect(governor = "plt_use_dict.state", client = "plt_dict_val.required")
   )
 
   js_calc_plt <- paste0(js_parse_helper, "
@@ -96,10 +147,36 @@ local({
     var h = getValue('plt_h');
     var dpi = getValue('plt_dpi');
 
+    // NEW JS VARIABLES
+    var prefix = getValue('plt_prefix');
+    var use_dict = getValue('plt_use_dict');
+    var dict_df = getValue('plt_dict_df');
+    var dict_key = getColName(getValue('plt_dict_key'));
+    var dict_val = getColName(getValue('plt_dict_val'));
+
     echo('target_obj <- ' + obj + '\\n');
-    echo('if (!is.list(target_obj) || inherits(target_obj, \"ggplot\")) { target_obj <- list(plot_1 = target_obj) }\\n');
-    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0(\"plot_\", seq_along(target_obj)) }\\n');
-    echo('names(target_obj) <- ifelse(names(target_obj) == \"\", paste0(\"plot_\", seq_along(target_obj)), names(target_obj))\\n');
+
+    // FEATURE 1: Automatic naming based on Workspace
+    echo('if (!is.list(target_obj) || inherits(target_obj, \"ggplot\")) {\\n');
+    echo('  target_obj <- list(target_obj)\\n');
+    echo('  names(target_obj) <- \"' + obj + '\"\\n'); // Extracts the literal string from GUI
+    echo('}\\n');
+
+    // FEATURE 3: Custom prefix
+    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0(\"' + prefix + '\", seq_along(target_obj)) }\\n');
+    echo('names(target_obj) <- ifelse(trimws(names(target_obj)) == \"\", paste0(\"' + prefix + '\", seq_along(target_obj)), names(target_obj))\\n');
+
+    // FEATURE 2: Dictionary Mapping
+    if (use_dict == 'true') {
+        echo('\\n# Dictionary Mapping\\n');
+        echo('dict_data <- as.data.frame(' + dict_df + ')\\n');
+        echo('key_col <- trimws(as.character(dict_data[[\"' + dict_key + '\"]]))\\n');
+        echo('val_col <- trimws(as.character(dict_data[[\"' + dict_val + '\"]]))\\n');
+        echo('matched_idx <- match(trimws(names(target_obj)), key_col)\\n');
+        echo('valid_matches <- !is.na(matched_idx)\\n');
+        echo('names(target_obj)[valid_matches] <- val_col[matched_idx[valid_matches]]\\n');
+    }
+
     echo('names(target_obj) <- gsub(\"[^A-Za-z0-9_.-]\", \"_\", names(target_obj))\\n\\n');
 
     if (mode == 'ind') {
@@ -159,9 +236,9 @@ local({
 
 
   # =========================================================================================
-  # COMPONENTE 2: Batch Table Exporter (flextable)
+  # COMPONENT 2: Batch Table Exporter (flextable)
   # =========================================================================================
-  help_tbl <- rk.rkh.doc(title = rk.rkh.title("Batch Table Exporter"), summary = rk.rkh.summary("Exporta una lista de tablas (flextable) a archivos individuales o a un documento combinado (Word, PPTX)."))
+  help_tbl <- rk.rkh.doc(title = rk.rkh.title("Batch Table Exporter"), summary = rk.rkh.summary("Exports a list of flextable objects to individual files or a combined document (Word, PPTX)."))
 
   var_sel_tbl <- rk.XML.varselector(id.name = "var_sel_tbl")
   tbl_list <- rk.XML.varslot("Target object (List of flextables or single flextable)", source = var_sel_tbl, required = TRUE, id.name = "tbl_list")
@@ -175,14 +252,58 @@ local({
   tbl_file <- rk.XML.browser("Output File (For Combined Document, e.g. tables.docx)", type = "savefile", required = FALSE, id.name = "tbl_file")
   tbl_auto_ext <- rk.XML.cbox("Automatically append extension to file name if missing", value = "TRUE", chk = TRUE, id.name = "tbl_auto_ext")
 
+  # --- NEW UI ELEMENTS FOR NAMING STRATEGY AND DICTIONARIES ---
+  tbl_prefix <- rk.XML.input("Prefix for unnamed objects (e.g., Table_, tbl_)", initial = "table_", id.name = "tbl_prefix")
+
+  tbl_use_dict <- rk.XML.cbox("Use Dictionary data.frame to rename files", value = "true", chk = FALSE, id.name = "tbl_use_dict")
+  tbl_dict_df <- rk.XML.varslot("Dictionary Data.Frame", source = var_sel_tbl, required = TRUE, classes = "data.frame", id.name = "tbl_dict_df")
+  tbl_dict_key <- rk.XML.varslot("Column: Object Names (Keys)", source = var_sel_tbl, required = TRUE, id.name = "tbl_dict_key")
+  tbl_dict_val <- rk.XML.varslot("Column: Desired File Names", source = var_sel_tbl, required = TRUE, id.name = "tbl_dict_val")
+
   tbl_ind_fmt <- rk.XML.dropdown("Format for Individual Files", options = list("Word (.docx)" = list(val = "docx", chk=TRUE), "PowerPoint (.pptx)" = list(val = "pptx"), "HTML (.html)" = list(val = "html")), id.name = "tbl_ind_fmt")
   tbl_comb_fmt <- rk.XML.dropdown("Format for Combined Document", options = list("Word (.docx)" = list(val = "docx", chk=TRUE), "PowerPoint (.pptx)" = list(val = "pptx")), id.name = "tbl_comb_fmt")
   tbl_orient <- rk.XML.dropdown("Word Page Orientation", options = list("Landscape" = list(val = "landscape", chk=TRUE), "Portrait" = list(val = "portrait")), id.name = "tbl_orient")
 
-  tab_tbl_in <- rk.XML.row(var_sel_tbl, rk.XML.col(tbl_list, tbl_mode, rk.XML.frame(tbl_dir, tbl_file, tbl_auto_ext, label="Destination Paths")))
-  tab_tbl_opt <- rk.XML.col(rk.XML.frame(tbl_ind_fmt, tbl_comb_fmt, tbl_orient, label="Format Settings"))
+  # 1. Split content into THREE columns (Tabs)
 
-  dialog_tbl <- rk.XML.dialog(label = "Batch Table Exporter", child = rk.XML.tabbook(tabs = list("Input & Mode" = tab_tbl_in, "Export Settings" = tab_tbl_opt)))
+  # Tab 1: Input & Destination
+  tab_tbl_in <- rk.XML.col(
+      tbl_list,
+      tbl_mode,
+      rk.XML.frame(tbl_dir, tbl_file, tbl_auto_ext, label="Destination Paths"),
+      rk.XML.stretch() # Pushes elements upwards
+  )
+
+  # Tab 2: Naming Strategy
+  tab_tbl_name <- rk.XML.col(
+      rk.XML.frame(
+        tbl_prefix,
+        tbl_use_dict,
+        rk.XML.row(tbl_dict_df, rk.XML.col(tbl_dict_key, tbl_dict_val)),
+        label="Dictionary Naming"
+      ),
+      rk.XML.stretch()
+  )
+
+  # Tab 3: Export Settings
+  tab_tbl_opt <- rk.XML.col(
+      rk.XML.frame(tbl_ind_fmt, tbl_comb_fmt, tbl_orient, label="Format Settings"),
+      rk.XML.stretch()
+  )
+
+  # 2. Restructure Dialog
+  # Place var_sel_tbl next to the tabbook so it is always visible on the left
+  dialog_tbl <- rk.XML.dialog(
+      label = "Batch Table Exporter",
+      child = rk.XML.row(
+          var_sel_tbl,
+          rk.XML.tabbook(tabs = list(
+              "Input & Mode" = tab_tbl_in,
+              "Naming Strategy" = tab_tbl_name,
+              "Export Settings" = tab_tbl_opt
+          ))
+      )
+  )
 
   is_ind_tbl <- rk.XML.convert(sources = "tbl_mode.string", mode = c(equals = "ind"), id.name = "is_ind_tbl")
   is_comb_tbl <- rk.XML.convert(sources = "tbl_mode.string", mode = c(equals = "comb"), id.name = "is_comb_tbl")
@@ -198,7 +319,15 @@ local({
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_file.required"),
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_auto_ext.enabled"),
       rk.XML.connect(governor = is_comb_tbl, client = "tbl_comb_fmt.enabled"),
-      rk.XML.connect(governor = is_comb_tbl, client = "tbl_orient.enabled")
+      rk.XML.connect(governor = is_comb_tbl, client = "tbl_orient.enabled"),
+
+      # Dictionary toggles
+      rk.XML.connect(governor = "tbl_use_dict.state", client = "tbl_dict_df.enabled"),
+      rk.XML.connect(governor = "tbl_use_dict.state", client = "tbl_dict_key.enabled"),
+      rk.XML.connect(governor = "tbl_use_dict.state", client = "tbl_dict_val.enabled"),
+      rk.XML.connect(governor = "tbl_use_dict.state", client = "tbl_dict_df.required"),
+      rk.XML.connect(governor = "tbl_use_dict.state", client = "tbl_dict_key.required"),
+      rk.XML.connect(governor = "tbl_use_dict.state", client = "tbl_dict_val.required")
   )
 
   js_calc_tbl <- paste0(js_parse_helper, "
@@ -210,10 +339,36 @@ local({
     var orient = getValue('tbl_orient');
     var fmt = (mode == 'ind') ? getValue('tbl_ind_fmt') : getValue('tbl_comb_fmt');
 
+    // NEW JS VARIABLES
+    var prefix = getValue('tbl_prefix');
+    var use_dict = getValue('tbl_use_dict');
+    var dict_df = getValue('tbl_dict_df');
+    var dict_key = getColName(getValue('tbl_dict_key'));
+    var dict_val = getColName(getValue('tbl_dict_val'));
+
     echo('target_obj <- ' + obj + '\\n');
-    echo('if (!is.list(target_obj) || inherits(target_obj, \"flextable\")) { target_obj <- list(table_1 = target_obj) }\\n');
-    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0(\"table_\", seq_along(target_obj)) }\\n');
-    echo('names(target_obj) <- ifelse(names(target_obj) == \"\", paste0(\"table_\", seq_along(target_obj)), names(target_obj))\\n');
+
+    // FEATURE 1: Automatic naming based on Workspace
+    echo('if (!is.list(target_obj) || inherits(target_obj, \"flextable\")) {\\n');
+    echo('  target_obj <- list(target_obj)\\n');
+    echo('  names(target_obj) <- \"' + obj + '\"\\n'); // Extracts the literal string from GUI
+    echo('}\\n');
+
+    // FEATURE 3: Custom prefix
+    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0(\"' + prefix + '\", seq_along(target_obj)) }\\n');
+    echo('names(target_obj) <- ifelse(trimws(names(target_obj)) == \"\", paste0(\"' + prefix + '\", seq_along(target_obj)), names(target_obj))\\n');
+
+    // FEATURE 2: Dictionary Mapping
+    if (use_dict == 'true') {
+        echo('\\n# Dictionary Mapping\\n');
+        echo('dict_data <- as.data.frame(' + dict_df + ')\\n');
+        echo('key_col <- trimws(as.character(dict_data[[\"' + dict_key + '\"]]))\\n');
+        echo('val_col <- trimws(as.character(dict_data[[\"' + dict_val + '\"]]))\\n');
+        echo('matched_idx <- match(trimws(names(target_obj)), key_col)\\n');
+        echo('valid_matches <- !is.na(matched_idx)\\n');
+        echo('names(target_obj)[valid_matches] <- val_col[matched_idx[valid_matches]]\\n');
+    }
+
     echo('names(target_obj) <- gsub(\"[^A-Za-z0-9_.-]\", \"_\", names(target_obj))\\n\\n');
 
     if (mode == 'ind') {
@@ -243,7 +398,7 @@ local({
             echo('if (!grepl(ext_pattern, out_file, ignore.case = TRUE)) out_file <- paste0(out_file, \".\", \"' + fmt + '\")\\n');
         }
 
-        // LÓGICA MEJORADA: Un bucle iterativo para colocar saltos de página
+        // IMPROVED LOGIC: Iterative loop to add page breaks
         if (fmt == 'docx') {
             echo('doc <- officer::read_docx()\\n');
             echo('for (i in seq_along(target_obj)) {\\n');
@@ -256,7 +411,7 @@ local({
             echo('res_msg <- paste(\"Combined Word exported to:\", out_file)\\n');
 
         } else if (fmt == 'pptx') {
-            // PowerPoint automáticamente crea una diapositiva por tabla con save_as_pptx
+            // PowerPoint automatically creates one slide per table with save_as_pptx
             echo('do.call(flextable::save_as_pptx, c(target_obj, list(path = out_file)))\\n');
             echo('res_msg <- paste(\"Combined PowerPoint exported to:\", out_file)\\n');
         }
@@ -271,7 +426,7 @@ local({
   comp_tbl <- rk.plugin.component("Batch Table Exporter", xml = list(dialog = dialog_tbl, logic = logic_tbl), js = list(require = c("purrr", "flextable", "officer"), calculate = js_calc_tbl, printout = js_print_tbl), hierarchy = common_hierarchy, rkh = list(help = help_tbl))
 
   # =========================================================================================
-  # CONSTRUCCIÓN DEL ESQUELETO
+  # SKELETON CONSTRUCTION
   # =========================================================================================
 
   rk.plugin.skeleton(
@@ -288,5 +443,5 @@ local({
     show = FALSE
   )
 
-  cat("\nPlugin 'rk.exporter' generado con éxito.\n")
+  cat("\nPlugin 'rk.exporter' generated successfully.\n")
 })

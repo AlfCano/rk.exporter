@@ -21,12 +21,18 @@
 		<connect governor="is_comb_plt" client="plt_auto_ext.enabled.enabled" />
 		<connect governor="is_comb_plt" client="plt_comb_fmt.enabled.enabled" />
 		<connect governor="is_comb_plt" client="plt_orient.enabled.enabled" />
+		<connect governor="plt_use_dict.state.state" client="plt_dict_df.enabled.enabled" />
+		<connect governor="plt_use_dict.state.state" client="plt_dict_key.enabled.enabled" />
+		<connect governor="plt_use_dict.state.state" client="plt_dict_val.enabled.enabled" />
+		<connect governor="plt_use_dict.state.state" client="plt_dict_df.required.enabled" />
+		<connect governor="plt_use_dict.state.state" client="plt_dict_key.required.enabled" />
+		<connect governor="plt_use_dict.state.state" client="plt_dict_val.required.enabled" />
 	</logic>
 	<dialog label="Batch Plot Exporter">
-		<tabbook>
-			<tab label="Input &amp; Mode" id="tab_InputMod">
-				<row id="row_vTL2EMIF12">
-					<varselector id="var_sel_plt" />
+		<row id="row_vIMIMTL2EM">
+			<varselector id="var_sel_plt" />
+			<tabbook>
+				<tab label="Input &amp; Mode" id="tab_InputMod">
 					<column id="clm_vTL2EMIF12">
 						<varslot id="plt_list" label="Target object (List of ggplot2 objects or single ggplot)" source="var_sel_plt" required="true" />
 						<radio id="plt_mode" label="Export Mode">
@@ -38,36 +44,54 @@
 							<browser label="Output File (For Combined Document, e.g. plots.pptx)" type="savefile" id="plt_file" required="false" />
 							<checkbox id="plt_auto_ext" label="Automatically append extension to file name if missing" value="TRUE" checked="true" />
 						</frame>
+						<stretch />
 					</column>
-				</row>
-			</tab>
-			<tab label="Export Settings" id="tab_ExprtStt">
-				<column id="clm_fFSFSFIFSV">
-					<frame label="Format Settings" id="frm_FrmtSttn">
-						<dropdown id="plt_ind_fmt" label="Format for Individual Files">
-							<option label="SVG" value="svg" checked="true" />
-							<option label="PNG" value="png" />
-							<option label="PDF" value="pdf" />
-						</dropdown>
-						<dropdown id="plt_comb_fmt" label="Format for Combined Document">
-							<option label="PowerPoint (.pptx)" value="pptx" checked="true" />
-							<option label="Word (.docx)" value="docx" />
-							<option label="PDF (.pdf)" value="pdf" />
-						</dropdown>
-						<dropdown id="plt_orient" label="Page Orientation (For Word/PDF)">
-							<option label="Landscape" value="landscape" checked="true" />
-							<option label="Portrait" value="portrait" />
-						</dropdown>
-					</frame>
-					<frame label="Dimensions" id="frm_Dimensns">
-						<row id="row_sW10130H61">
-							<spinbox label="Width (inches)" id="plt_w" initial="10" min="1" max="30" />
-							<spinbox label="Height (inches)" id="plt_h" initial="6" min="1" max="30" />
-						</row>
-						<spinbox label="Resolution (DPI) (For PNGs)" id="plt_dpi" initial="300" min="50" max="600" />
-					</frame>
-				</column>
-			</tab>
-		</tabbook>
+				</tab>
+				<tab label="Naming Strategy" id="tab_NmngStrt">
+					<column id="clm_fDNDNPGUDD">
+						<frame label="Dictionary Naming" id="frm_DctnryNm">
+							<input label="Prefix for unnamed objects (e.g., Graph_, plot_)" id="plt_prefix" initial="plot_" />
+							<checkbox id="plt_use_dict" label="Use Dictionary data.frame to rename files" value="true" />
+							<row id="row_vDDFCONKCD">
+								<varslot id="plt_dict_df" label="Dictionary Data.Frame" source="var_sel_plt" classes="data.frame" required="true" />
+								<column id="clm_vrCONKCDFN">
+									<varslot id="plt_dict_key" label="Column: Object Names (Keys)" source="var_sel_plt" required="true" />
+									<varslot id="plt_dict_val" label="Column: Desired File Names" source="var_sel_plt" required="true" />
+								</column>
+							</row>
+						</frame>
+						<stretch />
+					</column>
+				</tab>
+				<tab label="Export Settings" id="tab_ExprtStt">
+					<column id="clm_fFSFSFIFSV">
+						<frame label="Format Settings" id="frm_FrmtSttn">
+							<dropdown id="plt_ind_fmt" label="Format for Individual Files">
+								<option label="SVG" value="svg" checked="true" />
+								<option label="PNG" value="png" />
+								<option label="PDF" value="pdf" />
+							</dropdown>
+							<dropdown id="plt_comb_fmt" label="Format for Combined Document">
+								<option label="PowerPoint (.pptx)" value="pptx" checked="true" />
+								<option label="Word (.docx)" value="docx" />
+								<option label="PDF (.pdf)" value="pdf" />
+							</dropdown>
+							<dropdown id="plt_orient" label="Page Orientation (For Word/PDF)">
+								<option label="Landscape" value="landscape" checked="true" />
+								<option label="Portrait" value="portrait" />
+							</dropdown>
+						</frame>
+						<frame label="Dimensions" id="frm_Dimensns">
+							<row id="row_sW10130H61">
+								<spinbox label="Width (inches)" id="plt_w" initial="10" min="1" max="30" />
+								<spinbox label="Height (inches)" id="plt_h" initial="6" min="1" max="30" />
+							</row>
+							<spinbox label="Resolution (DPI) (For PNGs)" id="plt_dpi" initial="300" min="50" max="600" />
+						</frame>
+						<stretch />
+					</column>
+				</tab>
+			</tabbook>
+		</row>
 	</dialog>
 </document>

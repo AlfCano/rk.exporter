@@ -20,8 +20,8 @@
 		name="rk.exporter"
 		shortinfo="RKWard Plugin Suite for Batch Exporting lists of ggplot2 and flextable objects to individual files or combined Office documents (PDF, Word, PPTX)."
 		longinfo="RKWard Plugin Suite for Batch Exporting lists of ggplot2 and flextable objects to individual files or combined Office documents (PDF, Word, PPTX)."
-		version="0.0.1"
-		releasedate="2026-04-25"
+		version="0.0.2"
+		releasedate="2026-07-25"
 		url="https://github.com/AlfCano/rk.exporter"
 		license="GPL (&gt;= 3)"
 	>

@@ -37,10 +37,36 @@ function calculate(is_preview){
     var h = getValue('plt_h');
     var dpi = getValue('plt_dpi');
 
+    // NEW JS VARIABLES
+    var prefix = getValue('plt_prefix');
+    var use_dict = getValue('plt_use_dict');
+    var dict_df = getValue('plt_dict_df');
+    var dict_key = getColName(getValue('plt_dict_key'));
+    var dict_val = getColName(getValue('plt_dict_val'));
+
     echo('target_obj <- ' + obj + '\n');
-    echo('if (!is.list(target_obj) || inherits(target_obj, "ggplot")) { target_obj <- list(plot_1 = target_obj) }\n');
-    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0("plot_", seq_along(target_obj)) }\n');
-    echo('names(target_obj) <- ifelse(names(target_obj) == "", paste0("plot_", seq_along(target_obj)), names(target_obj))\n');
+
+    // FEATURE 1: Automatic naming based on Workspace
+    echo('if (!is.list(target_obj) || inherits(target_obj, "ggplot")) {\n');
+    echo('  target_obj <- list(target_obj)\n');
+    echo('  names(target_obj) <- "' + obj + '"\n'); // Extracts the literal string from GUI
+    echo('}\n');
+
+    // FEATURE 3: Custom prefix
+    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0("' + prefix + '", seq_along(target_obj)) }\n');
+    echo('names(target_obj) <- ifelse(trimws(names(target_obj)) == "", paste0("' + prefix + '", seq_along(target_obj)), names(target_obj))\n');
+
+    // FEATURE 2: Dictionary Mapping
+    if (use_dict == 'true') {
+        echo('\n# Dictionary Mapping\n');
+        echo('dict_data <- as.data.frame(' + dict_df + ')\n');
+        echo('key_col <- trimws(as.character(dict_data[["' + dict_key + '"]]))\n');
+        echo('val_col <- trimws(as.character(dict_data[["' + dict_val + '"]]))\n');
+        echo('matched_idx <- match(trimws(names(target_obj)), key_col)\n');
+        echo('valid_matches <- !is.na(matched_idx)\n');
+        echo('names(target_obj)[valid_matches] <- val_col[matched_idx[valid_matches]]\n');
+    }
+
     echo('names(target_obj) <- gsub("[^A-Za-z0-9_.-]", "_", names(target_obj))\n\n');
 
     if (mode == 'ind') {
@@ -54,7 +80,7 @@ function calculate(is_preview){
         echo('res_msg <- paste(length(target_obj), "plots successfully exported to:", "' + out_dir + '")\n');
     } else {
         echo('if ("' + out_file + '" == "") stop("Error: Output File is required.")\n');
-        
+
         echo('out_file <- "' + out_file + '"\n');
         if (auto_ext) {
             echo('ext_pattern <- paste0("\\\\.", "' + comb_fmt + '", "$")\n');

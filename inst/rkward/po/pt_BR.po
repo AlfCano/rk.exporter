@@ -122,3 +122,27 @@ msgstr "Resultados da Exportação de Gráficos em Lote"
 
 msgid "Batch Table Export Results"
 msgstr "Resultados da Exportação de Tabelas em Lote"
+
+msgid "Naming Strategy"
+msgstr "Estratégia de Nomeação"
+
+msgid "Prefix for unnamed objects (e.g., Graph_, plot_)"
+msgstr "Prefixo para objetos sem nome (ex., Graph_, plot_)"
+
+msgid "Use Dictionary data.frame to rename files"
+msgstr "Usar data.frame como Dicionário para renomear arquivos"
+
+msgid "Dictionary Data.Frame"
+msgstr "Data.Frame Dicionário"
+
+msgid "Column: Object Names (Keys)"
+msgstr "Coluna: Nomes dos Objetos (Chaves)"
+
+msgid "Column: Desired File Names"
+msgstr "Coluna: Nomes de Arquivo Desejados"
+
+msgid "Dictionary Naming"
+msgstr "Nomeação por Dicionário"
+
+msgid "Prefix for unnamed objects (e.g., Table_, tbl_)"
+msgstr "Prefixo para objetos sem nome (ex., Tabela_, tbl_)"
