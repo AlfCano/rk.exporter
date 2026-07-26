@@ -1,6 +1,6 @@
 # rk.exporter: Batch Plot and Table Exporting for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.1-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.0.2-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.exporter/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.exporter/actions/workflows/lintr.yml)
@@ -8,6 +8,16 @@
 **rk.exporter** brings seamless, automated batch exporting capabilities to the RKWard GUI. Stop wasting hours manually exporting plots one by one or copy-pasting tables into Microsoft Office. 
 
 Powered by `purrr`, `flextable`, and `officer`, this plugin suite allows you to take a List of `ggplot2` objects or `flextables` and instantly export them as hundreds of individual high-res files, or compile them directly into professional, multi-page Word documents, PDFs, or PowerPoint presentations.
+
+## 🚀 What's New in Version 0.0.2
+
+This update introduces powerful new automation features for naming your exported files, making it easier to integrate the plugin into large-scale parameterized reporting workflows:
+
+* **📖 Dictionary-Based Renaming:** You can now use a Dictionary `data.frame` to automatically rename your exported files. Simply map a column with your internal R object names (Keys) to a column with your desired publication-ready file names (Values), and the plugin will handle the exact matching.
+* **🧠 Smart Workspace Naming:** When exporting a single object (a single `ggplot` or `flextable`), the plugin now automatically reads the name of the object directly from your R global environment (e.g., exporting `p_demographics` yields `p_demographics.png` instead of a generic `plot_1.png`).
+* **✍️ Custom Prefixes:** Added a new input field to define custom prefixes (e.g., "Graph_", "Fig_", or "Table_") for unnamed lists of objects, replacing the default hardcoded prefixes.
+* **🗂️ UI Reorganization:** To accommodate the new features without overcrowding the window, the interface has been split into a clean **3-Tab Layout** ("Input & Mode", "Naming Strategy", and "Export Settings"), keeping the Variable Selector permanently anchored to the left for easy drag-and-drop.
+* **🌍 i18n Updates:** All new "Naming Strategy" UI elements have been fully translated into Spanish, French, German, and Portuguese (Brazil).
 
 ## 🚀 What's New in Version 0.0.1
 
@@ -41,17 +51,17 @@ The interface is fully localized in:
 
 ## 📦 Installation
 
-This plugin is not yet on CRAN. To install it, use the `remotes` or `devtools` package in RKWard.
+This plugin is not yet on CRAN. To install it, use the `` or `devtools` package in RKWard.
 
 1.  **Open RKWard**.
 2.  **Run the following command** in the R Console:
 
     ```R
-    # If you don't have devtools installed:
-    # install.packages("devtools")
+    # If you don't have remotes installed:
+    # install.packages("remotes")
     
     local({
-      require(devtools)
+      require(remotes)
       install_github("AlfCano/rk.exporter", force = TRUE)
     })
     ```
