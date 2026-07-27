@@ -1,6 +1,6 @@
 # rk.exporter: Batch Plot and Table Exporting for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.2-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.0.3-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.exporter/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.exporter/actions/workflows/lintr.yml)
@@ -8,6 +8,18 @@
 **rk.exporter** brings seamless, automated batch exporting capabilities to the RKWard GUI. Stop wasting hours manually exporting plots one by one or copy-pasting tables into Microsoft Office. 
 
 Powered by `purrr`, `flextable`, and `officer`, this plugin suite allows you to take a List of `ggplot2` objects or `flextables` and instantly export them as hundreds of individual high-res files, or compile them directly into professional, multi-page Word documents, PDFs, or PowerPoint presentations.
+
+## 🚀 What's New in Version 0.0.3
+
+This update focuses on better object serialization and a much cleaner user interface for naming strategies:
+
+* **💾 RDS Export Support:** You can now export your plots and tables as `.rds` files! This is incredibly useful for saving the pure R objects (either individually or as a combined list) to be loaded later into other R scripts, RMarkdown documents, or Shiny applications using `readRDS()`.
+* **🎛️ Naming Strategy Overhaul (Radio Buttons):** The Naming Strategy tab has been completely redesigned using a clean, 3-option radio button interface to prevent logic collisions:
+    1. **Keep original list names / Workspace object name** (Smart Default)
+    2. **Sequential Naming** (Using a custom prefix)
+    3. **Dictionary Naming** (Using a mapped data.frame)
+* **🧠 Smarter Default Naming:** The default naming strategy is now context-aware. If you pass a list with internal names (e.g., `list(income = p1, age = p2)`), it respects them (`income.png`, `age.png`). If the list is unnamed, it intelligently falls back to the workspace variable name and adds a sequence (e.g., `my_graphs_1.png`, `my_graphs_2.png`).
+* **🌍 i18n Updates:** All the new UI elements and naming strategies have been fully translated into Spanish, French, German, and Portuguese (Brazil).
 
 ## 🚀 What's New in Version 0.0.2
 
@@ -51,7 +63,7 @@ The interface is fully localized in:
 
 ## 📦 Installation
 
-This plugin is not yet on CRAN. To install it, use the `` or `devtools` package in RKWard.
+This plugin is not yet on CRAN. To install it, use the `remotes` or `devtools` package in RKWard.
 
 1.  **Open RKWard**.
 2.  **Run the following command** in the R Console:
