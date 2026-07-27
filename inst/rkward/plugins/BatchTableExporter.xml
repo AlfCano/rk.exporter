@@ -13,6 +13,8 @@
 	<logic>
 		<convert id="is_ind_tbl" sources="tbl_mode.string" mode="equals" standard="ind" />
 		<convert id="is_comb_tbl" sources="tbl_mode.string" mode="equals" standard="comb" />
+		<convert id="is_strat_seq_tbl" sources="tbl_name_strategy.string" mode="equals" standard="seq" />
+		<convert id="is_strat_dict_tbl" sources="tbl_name_strategy.string" mode="equals" standard="dict" />
 		<connect governor="is_ind_tbl" client="tbl_dir.enabled.enabled" />
 		<connect governor="is_ind_tbl" client="tbl_dir.required.enabled" />
 		<connect governor="is_ind_tbl" client="tbl_ind_fmt.enabled.enabled" />
@@ -21,12 +23,13 @@
 		<connect governor="is_comb_tbl" client="tbl_auto_ext.enabled.enabled" />
 		<connect governor="is_comb_tbl" client="tbl_comb_fmt.enabled.enabled" />
 		<connect governor="is_comb_tbl" client="tbl_orient.enabled.enabled" />
-		<connect governor="tbl_use_dict.state.state" client="tbl_dict_df.enabled.enabled" />
-		<connect governor="tbl_use_dict.state.state" client="tbl_dict_key.enabled.enabled" />
-		<connect governor="tbl_use_dict.state.state" client="tbl_dict_val.enabled.enabled" />
-		<connect governor="tbl_use_dict.state.state" client="tbl_dict_df.required.enabled" />
-		<connect governor="tbl_use_dict.state.state" client="tbl_dict_key.required.enabled" />
-		<connect governor="tbl_use_dict.state.state" client="tbl_dict_val.required.enabled" />
+		<connect governor="is_strat_seq_tbl" client="tbl_prefix.enabled.enabled" />
+		<connect governor="is_strat_dict_tbl" client="tbl_dict_df.enabled.enabled" />
+		<connect governor="is_strat_dict_tbl" client="tbl_dict_key.enabled.enabled" />
+		<connect governor="is_strat_dict_tbl" client="tbl_dict_val.enabled.enabled" />
+		<connect governor="is_strat_dict_tbl" client="tbl_dict_df.required.enabled" />
+		<connect governor="is_strat_dict_tbl" client="tbl_dict_key.required.enabled" />
+		<connect governor="is_strat_dict_tbl" client="tbl_dict_val.required.enabled" />
 	</logic>
 	<dialog label="Batch Table Exporter">
 		<row id="row_vIMIMTLEMI">
@@ -48,10 +51,16 @@
 					</column>
 				</tab>
 				<tab label="Naming Strategy" id="tab_NmngStrt">
-					<column id="clm_fDNDNPTUDD">
-						<frame label="Dictionary Naming" id="frm_DctnryNm">
-							<input label="Prefix for unnamed objects (e.g., Table_, tbl_)" id="tbl_prefix" initial="table_" />
-							<checkbox id="tbl_use_dict" label="Use Dictionary data.frame to rename files" value="true" />
+					<column id="clm_rNSKWSNUUD">
+						<radio id="tbl_name_strategy" label="Naming Strategy">
+							<option label="Keep original list names / Workspace object name" value="obj" checked="true" />
+							<option label="Sequential Naming (Use custom prefix)" value="seq" />
+							<option label="Use Dictionary data.frame to rename" value="dict" />
+						</radio>
+						<frame label="Sequential Settings" id="frm_SqntlStt">
+							<input label="Prefix (e.g., Table_, tbl_)" id="tbl_prefix" initial="table_" />
+						</frame>
+						<frame label="Dictionary Settings" id="frm_DctnrySt">
 							<row id="row_vDDFCONKCD">
 								<varslot id="tbl_dict_df" label="Dictionary Data.Frame" source="var_sel_tbl" classes="data.frame" required="true" />
 								<column id="clm_vrCONKCDFN">
@@ -70,10 +79,12 @@
 								<option label="Word (.docx)" value="docx" checked="true" />
 								<option label="PowerPoint (.pptx)" value="pptx" />
 								<option label="HTML (.html)" value="html" />
+								<option label="RDS" value="rds" />
 							</dropdown>
 							<dropdown id="tbl_comb_fmt" label="Format for Combined Document">
 								<option label="Word (.docx)" value="docx" checked="true" />
 								<option label="PowerPoint (.pptx)" value="pptx" />
+								<option label="RDS (.rds)" value="rds" />
 							</dropdown>
 							<dropdown id="tbl_orient" label="Word Page Orientation">
 								<option label="Landscape" value="landscape" checked="true" />

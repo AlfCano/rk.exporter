@@ -13,6 +13,8 @@
 	<logic>
 		<convert id="is_ind_plt" sources="plt_mode.string" mode="equals" standard="ind" />
 		<convert id="is_comb_plt" sources="plt_mode.string" mode="equals" standard="comb" />
+		<convert id="is_strat_seq_plt" sources="plt_name_strategy.string" mode="equals" standard="seq" />
+		<convert id="is_strat_dict_plt" sources="plt_name_strategy.string" mode="equals" standard="dict" />
 		<connect governor="is_ind_plt" client="plt_dir.enabled.enabled" />
 		<connect governor="is_ind_plt" client="plt_dir.required.enabled" />
 		<connect governor="is_ind_plt" client="plt_ind_fmt.enabled.enabled" />
@@ -21,12 +23,13 @@
 		<connect governor="is_comb_plt" client="plt_auto_ext.enabled.enabled" />
 		<connect governor="is_comb_plt" client="plt_comb_fmt.enabled.enabled" />
 		<connect governor="is_comb_plt" client="plt_orient.enabled.enabled" />
-		<connect governor="plt_use_dict.state.state" client="plt_dict_df.enabled.enabled" />
-		<connect governor="plt_use_dict.state.state" client="plt_dict_key.enabled.enabled" />
-		<connect governor="plt_use_dict.state.state" client="plt_dict_val.enabled.enabled" />
-		<connect governor="plt_use_dict.state.state" client="plt_dict_df.required.enabled" />
-		<connect governor="plt_use_dict.state.state" client="plt_dict_key.required.enabled" />
-		<connect governor="plt_use_dict.state.state" client="plt_dict_val.required.enabled" />
+		<connect governor="is_strat_seq_plt" client="plt_prefix.enabled.enabled" />
+		<connect governor="is_strat_dict_plt" client="plt_dict_df.enabled.enabled" />
+		<connect governor="is_strat_dict_plt" client="plt_dict_key.enabled.enabled" />
+		<connect governor="is_strat_dict_plt" client="plt_dict_val.enabled.enabled" />
+		<connect governor="is_strat_dict_plt" client="plt_dict_df.required.enabled" />
+		<connect governor="is_strat_dict_plt" client="plt_dict_key.required.enabled" />
+		<connect governor="is_strat_dict_plt" client="plt_dict_val.required.enabled" />
 	</logic>
 	<dialog label="Batch Plot Exporter">
 		<row id="row_vIMIMTL2EM">
@@ -48,10 +51,16 @@
 					</column>
 				</tab>
 				<tab label="Naming Strategy" id="tab_NmngStrt">
-					<column id="clm_fDNDNPGUDD">
-						<frame label="Dictionary Naming" id="frm_DctnryNm">
-							<input label="Prefix for unnamed objects (e.g., Graph_, plot_)" id="plt_prefix" initial="plot_" />
-							<checkbox id="plt_use_dict" label="Use Dictionary data.frame to rename files" value="true" />
+					<column id="clm_rNSKWSNUUD">
+						<radio id="plt_name_strategy" label="Naming Strategy">
+							<option label="Keep original list names / Workspace object name" value="obj" checked="true" />
+							<option label="Sequential Naming (Use custom prefix)" value="seq" />
+							<option label="Use Dictionary data.frame to rename" value="dict" />
+						</radio>
+						<frame label="Sequential Settings" id="frm_SqntlStt">
+							<input label="Prefix (e.g., Graph_, plot_)" id="plt_prefix" initial="plot_" />
+						</frame>
+						<frame label="Dictionary Settings" id="frm_DctnrySt">
 							<row id="row_vDDFCONKCD">
 								<varslot id="plt_dict_df" label="Dictionary Data.Frame" source="var_sel_plt" classes="data.frame" required="true" />
 								<column id="clm_vrCONKCDFN">
@@ -70,11 +79,13 @@
 								<option label="SVG" value="svg" checked="true" />
 								<option label="PNG" value="png" />
 								<option label="PDF" value="pdf" />
+								<option label="RDS" value="rds" />
 							</dropdown>
 							<dropdown id="plt_comb_fmt" label="Format for Combined Document">
 								<option label="PowerPoint (.pptx)" value="pptx" checked="true" />
 								<option label="Word (.docx)" value="docx" />
 								<option label="PDF (.pdf)" value="pdf" />
+								<option label="RDS (.rds)" value="rds" />
 							</dropdown>
 							<dropdown id="plt_orient" label="Page Orientation (For Word/PDF)">
 								<option label="Landscape" value="landscape" checked="true" />

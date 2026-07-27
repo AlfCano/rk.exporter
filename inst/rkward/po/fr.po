@@ -146,3 +146,36 @@ msgstr "Nommage par Dictionnaire"
 
 msgid "Prefix for unnamed objects (e.g., Table_, tbl_)"
 msgstr "Préfixe pour les objets sans nom (ex., Table_, tbl_)"
+
+msgid "Naming Strategy"
+msgstr "Stratégie de nommage"
+
+msgid "Keep original list names / Workspace object name"
+msgstr "Conserver les noms de liste d'origine / Nom de l'objet de l'espace de travail"
+
+msgid "Sequential Naming (Use custom prefix)"
+msgstr "Nommage Séquentiel (Utiliser un préfixe personnalisé)"
+
+msgid "Use Dictionary data.frame to rename"
+msgstr "Utiliser un data.frame Dictionnaire pour renommer"
+
+msgid "Sequential Settings"
+msgstr "Paramètres séquentiels"
+
+msgid "Dictionary Settings"
+msgstr "Paramètres du dictionnaire"
+
+msgid "Prefix (e.g., Graph_, plot_)"
+msgstr "Préfixe (ex., Graph_, plot_)"
+
+msgid "Prefix (e.g., Table_, tbl_)"
+msgstr "Préfixe (ex., Table_, tbl_)"
+
+msgid "Dictionary Data.Frame"
+msgstr "Data.Frame Dictionnaire"
+
+msgid "Column: Object Names (Keys)"
+msgstr "Colonne : Noms des objets (Clés)"
+
+msgid "Column: Desired File Names"
+msgstr "Colonne : Noms de fichiers souhaités"

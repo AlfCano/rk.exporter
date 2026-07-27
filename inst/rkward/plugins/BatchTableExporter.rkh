@@ -30,11 +30,12 @@
 		<setting id="tbl_auto_ext">
 		</setting>
 		<caption id="tab_NmngStrt" />
-		<caption id="frm_DctnryNm" />
+		<setting id="tbl_name_strategy">
+		</setting>
+		<caption id="frm_SqntlStt" />
 		<setting id="tbl_prefix">
 		</setting>
-		<setting id="tbl_use_dict">
-		</setting>
+		<caption id="frm_DctnrySt" />
 		<setting id="tbl_dict_df">
 		</setting>
 		<setting id="tbl_dict_key">

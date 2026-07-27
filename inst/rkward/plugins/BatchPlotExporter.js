@@ -25,48 +25,35 @@ function calculate(is_preview){
         return fullPath;
     }
   
-    var obj = getValue('plt_list');
-    var mode = getValue('plt_mode');
-    var out_dir = getValue('plt_dir').replace(/\\/g, '/');
-    var out_file = getValue('plt_file').replace(/\\/g, '/');
-    var auto_ext = getValue('plt_auto_ext') == 'TRUE';
-    var ind_fmt = getValue('plt_ind_fmt');
-    var comb_fmt = getValue('plt_comb_fmt');
-    var orient = getValue('plt_orient');
-    var w = getValue('plt_w');
-    var h = getValue('plt_h');
-    var dpi = getValue('plt_dpi');
-
-    // NEW JS VARIABLES
-    var prefix = getValue('plt_prefix');
-    var use_dict = getValue('plt_use_dict');
-    var dict_df = getValue('plt_dict_df');
-    var dict_key = getColName(getValue('plt_dict_key'));
-    var dict_val = getColName(getValue('plt_dict_val'));
+    var obj = getValue('plt_list'); var mode = getValue('plt_mode'); var out_dir = getValue('plt_dir').replace(/\\/g, '/'); var out_file = getValue('plt_file').replace(/\\/g, '/');
+    var auto_ext = getValue('plt_auto_ext') == 'TRUE'; var ind_fmt = getValue('plt_ind_fmt'); var comb_fmt = getValue('plt_comb_fmt');
+    var orient = getValue('plt_orient'); var w = getValue('plt_w'); var h = getValue('plt_h'); var dpi = getValue('plt_dpi');
+    var strat = getValue('plt_name_strategy'); var prefix = getValue('plt_prefix'); var dict_df = getValue('plt_dict_df');
+    var dict_key = getColName(getValue('plt_dict_key')); var dict_val = getColName(getValue('plt_dict_val'));
 
     echo('target_obj <- ' + obj + '\n');
-
-    // FEATURE 1: Automatic naming based on Workspace
     echo('if (!is.list(target_obj) || inherits(target_obj, "ggplot")) {\n');
     echo('  target_obj <- list(target_obj)\n');
-    echo('  names(target_obj) <- "' + obj + '"\n'); // Extracts the literal string from GUI
+    echo('  names(target_obj) <- "' + obj + '"\n');
     echo('}\n');
 
-    // FEATURE 3: Custom prefix
-    echo('if (is.null(names(target_obj))) { names(target_obj) <- paste0("' + prefix + '", seq_along(target_obj)) }\n');
-    echo('names(target_obj) <- ifelse(trimws(names(target_obj)) == "", paste0("' + prefix + '", seq_along(target_obj)), names(target_obj))\n');
+    if (strat == 'seq') {
+        echo('names(target_obj) <- paste0("' + prefix + '", seq_along(target_obj))\n');
+    } else {
+        echo('if (is.null(names(target_obj))) names(target_obj) <- paste0("' + obj + '_", seq_along(target_obj))\n');
+        echo('empty_idx <- trimws(names(target_obj)) == ""\n');
+        echo('if (any(empty_idx)) names(target_obj)[empty_idx] <- paste0("' + obj + '_", which(empty_idx))\n');
 
-    // FEATURE 2: Dictionary Mapping
-    if (use_dict == 'true') {
-        echo('\n# Dictionary Mapping\n');
-        echo('dict_data <- as.data.frame(' + dict_df + ')\n');
-        echo('key_col <- trimws(as.character(dict_data[["' + dict_key + '"]]))\n');
-        echo('val_col <- trimws(as.character(dict_data[["' + dict_val + '"]]))\n');
-        echo('matched_idx <- match(trimws(names(target_obj)), key_col)\n');
-        echo('valid_matches <- !is.na(matched_idx)\n');
-        echo('names(target_obj)[valid_matches] <- val_col[matched_idx[valid_matches]]\n');
+        if (strat == 'dict') {
+            echo('\n# Dictionary Mapping\n');
+            echo('dict_data <- as.data.frame(' + dict_df + ')\n');
+            echo('key_col <- trimws(as.character(dict_data[["' + dict_key + '"]]))\n');
+            echo('val_col <- trimws(as.character(dict_data[["' + dict_val + '"]]))\n');
+            echo('matched_idx <- match(trimws(names(target_obj)), key_col)\n');
+            echo('valid_matches <- !is.na(matched_idx)\n');
+            echo('names(target_obj)[valid_matches] <- val_col[matched_idx[valid_matches]]\n');
+        }
     }
-
     echo('names(target_obj) <- gsub("[^A-Za-z0-9_.-]", "_", names(target_obj))\n\n');
 
     if (mode == 'ind') {
@@ -75,19 +62,24 @@ function calculate(is_preview){
         echo('dir.create("' + out_dir + '", showWarnings = FALSE, recursive = TRUE)\n');
         echo('purrr::iwalk(target_obj, function(.x, .y) {\n');
         echo('  ruta <- file.path("' + out_dir + '", paste0(.y, ".' + ind_fmt + '"))\n');
-        echo('  ggplot2::ggsave(filename = ruta, plot = .x, device = "' + ind_fmt + '", width = ' + w + ', height = ' + h + ', dpi = ' + dpi + ')\n');
+        if (ind_fmt == 'rds') {
+            echo('  saveRDS(.x, file = ruta)\n');
+        } else {
+            echo('  ggplot2::ggsave(filename = ruta, plot = .x, device = "' + ind_fmt + '", width = ' + w + ', height = ' + h + ', dpi = ' + dpi + ')\n');
+        }
         echo('})\n');
         echo('res_msg <- paste(length(target_obj), "plots successfully exported to:", "' + out_dir + '")\n');
     } else {
         echo('if ("' + out_file + '" == "") stop("Error: Output File is required.")\n');
-
         echo('out_file <- "' + out_file + '"\n');
         if (auto_ext) {
             echo('ext_pattern <- paste0("\\\\.", "' + comb_fmt + '", "$")\n');
             echo('if (!grepl(ext_pattern, out_file, ignore.case = TRUE)) out_file <- paste0(out_file, ".", "' + comb_fmt + '")\n');
         }
-
-        if (comb_fmt == 'pdf') {
+        if (comb_fmt == 'rds') {
+            echo('saveRDS(target_obj, file = out_file)\n');
+            echo('res_msg <- paste("Combined list saved as RDS to:", out_file)\n');
+        } else if (comb_fmt == 'pdf') {
             echo('if ("' + orient + '" == "landscape") { pdf(out_file, width = ' + w + ', height = ' + h + ') } else { pdf(out_file, width = ' + h + ', height = ' + w + ') }\n');
             echo('purrr::walk(target_obj, print)\n');
             echo('dev.off()\n');

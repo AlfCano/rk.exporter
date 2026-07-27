@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: rk.exporter 0.0.1\n"
+"Project-Id-Version: rk.exporter 0.0.3\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -146,3 +146,36 @@ msgstr "Nomeação por Dicionário"
 
 msgid "Prefix for unnamed objects (e.g., Table_, tbl_)"
 msgstr "Prefixo para objetos sem nome (ex., Tabela_, tbl_)"
+
+msgid "Naming Strategy"
+msgstr "Estratégia de Nomeação"
+
+msgid "Keep original list names / Workspace object name"
+msgstr "Manter nomes originais da lista / Nome do objeto da área de trabalho"
+
+msgid "Sequential Naming (Use custom prefix)"
+msgstr "Nomeação Sequencial (Usar prefixo personalizado)"
+
+msgid "Use Dictionary data.frame to rename"
+msgstr "Usar data.frame como Dicionário para renomear"
+
+msgid "Sequential Settings"
+msgstr "Configurações Sequenciais"
+
+msgid "Dictionary Settings"
+msgstr "Configurações do Dicionário"
+
+msgid "Prefix (e.g., Graph_, plot_)"
+msgstr "Prefixo (ex., Graph_, plot_)"
+
+msgid "Prefix (e.g., Table_, tbl_)"
+msgstr "Prefixo (ex., Tabela_, tbl_)"
+
+msgid "Dictionary Data.Frame"
+msgstr "Data.Frame Dicionário"
+
+msgid "Column: Object Names (Keys)"
+msgstr "Coluna: Nomes dos Objetos (Chaves)"
+
+msgid "Column: Desired File Names"
+msgstr "Coluna: Nomes de Arquivo Desejados"

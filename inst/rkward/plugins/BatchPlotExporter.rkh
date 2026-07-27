@@ -30,11 +30,12 @@
 		<setting id="plt_auto_ext">
 		</setting>
 		<caption id="tab_NmngStrt" />
-		<caption id="frm_DctnryNm" />
+		<setting id="plt_name_strategy">
+		</setting>
+		<caption id="frm_SqntlStt" />
 		<setting id="plt_prefix">
 		</setting>
-		<setting id="plt_use_dict">
-		</setting>
+		<caption id="frm_DctnrySt" />
 		<setting id="plt_dict_df">
 		</setting>
 		<setting id="plt_dict_key">
