@@ -3,8 +3,8 @@ Type: Package
 Title: RKWard Plugin Suite for Batch Exporting lists of ggplot2 and
         flextable objects to individual files or combined Office
         documents (PDF, Word, PPTX).
-Version: 0.0.3
-Date: 2026-07-26
+Version: 0.0.4
+Date: 2026-07-28
 Author: Alfonso Cano Robles
 Maintainer: Alfonso Cano Robles <alfonso.cano@correo.buap.mx>
 Enhances: rkward

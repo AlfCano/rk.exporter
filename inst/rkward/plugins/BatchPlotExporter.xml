@@ -62,10 +62,10 @@
 						</frame>
 						<frame label="Dictionary Settings" id="frm_DctnrySt">
 							<row id="row_vDDFCONKCD">
-								<varslot id="plt_dict_df" label="Dictionary Data.Frame" source="var_sel_plt" classes="data.frame" required="true" />
+								<varslot id="plt_dict_df" label="Dictionary Data.Frame" source="var_sel_plt" classes="data.frame" />
 								<column id="clm_vrCONKCDFN">
-									<varslot id="plt_dict_key" label="Column: Object Names (Keys)" source="var_sel_plt" required="true" />
-									<varslot id="plt_dict_val" label="Column: Desired File Names" source="var_sel_plt" required="true" />
+									<varslot id="plt_dict_key" label="Column: Object Names (Keys)" source="var_sel_plt" />
+									<varslot id="plt_dict_val" label="Column: Desired File Names" source="var_sel_plt" />
 								</column>
 							</row>
 						</frame>

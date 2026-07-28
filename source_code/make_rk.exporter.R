@@ -15,7 +15,7 @@ local({
     ),
     about = list(
       desc = "RKWard Plugin Suite for Batch Exporting lists of ggplot2 and flextable objects to individual files or combined Office documents (PDF, Word, PPTX).",
-      version = "0.0.3",
+      version = "0.0.4",
       url = "https://github.com/AlfCano/rk.exporter",
       license = "GPL (>= 3)"
     )
@@ -61,9 +61,11 @@ local({
   ), id.name = "plt_name_strategy")
 
   plt_prefix <- rk.XML.input("Prefix (e.g., Graph_, plot_)", initial = "plot_", id.name = "plt_prefix")
-  plt_dict_df <- rk.XML.varslot("Dictionary Data.Frame", source = var_sel_plt, required = TRUE, classes = "data.frame", id.name = "plt_dict_df")
-  plt_dict_key <- rk.XML.varslot("Column: Object Names (Keys)", source = var_sel_plt, required = TRUE, id.name = "plt_dict_key")
-  plt_dict_val <- rk.XML.varslot("Column: Desired File Names", source = var_sel_plt, required = TRUE, id.name = "plt_dict_val")
+
+
+  plt_dict_df <- rk.XML.varslot("Dictionary Data.Frame", source = var_sel_plt, required = FALSE, classes = "data.frame", id.name = "plt_dict_df")
+  plt_dict_key <- rk.XML.varslot("Column: Object Names (Keys)", source = var_sel_plt, required = FALSE, id.name = "plt_dict_key")
+  plt_dict_val <- rk.XML.varslot("Column: Desired File Names", source = var_sel_plt, required = FALSE, id.name = "plt_dict_val")
 
   plt_ind_fmt <- rk.XML.dropdown("Format for Individual Files", options = list("SVG" = list(val = "svg", chk=TRUE), "PNG" = list(val = "png"), "PDF" = list(val = "pdf"), "RDS" = list(val = "rds")), id.name = "plt_ind_fmt")
   plt_comb_fmt <- rk.XML.dropdown("Format for Combined Document", options = list("PowerPoint (.pptx)" = list(val = "pptx", chk=TRUE), "Word (.docx)" = list(val = "docx"), "PDF (.pdf)" = list(val = "pdf"), "RDS (.rds)" = list(val = "rds")), id.name = "plt_comb_fmt")
@@ -221,9 +223,10 @@ local({
   ), id.name = "tbl_name_strategy")
 
   tbl_prefix <- rk.XML.input("Prefix (e.g., Table_, tbl_)", initial = "table_", id.name = "tbl_prefix")
-  tbl_dict_df <- rk.XML.varslot("Dictionary Data.Frame", source = var_sel_tbl, required = TRUE, classes = "data.frame", id.name = "tbl_dict_df")
-  tbl_dict_key <- rk.XML.varslot("Column: Object Names (Keys)", source = var_sel_tbl, required = TRUE, id.name = "tbl_dict_key")
-  tbl_dict_val <- rk.XML.varslot("Column: Desired File Names", source = var_sel_tbl, required = TRUE, id.name = "tbl_dict_val")
+
+  tbl_dict_df <- rk.XML.varslot("Dictionary Data.Frame", source = var_sel_tbl, required = FALSE, classes = "data.frame", id.name = "tbl_dict_df")
+  tbl_dict_key <- rk.XML.varslot("Column: Object Names (Keys)", source = var_sel_tbl, required = FALSE, id.name = "tbl_dict_key")
+  tbl_dict_val <- rk.XML.varslot("Column: Desired File Names", source = var_sel_tbl, required = FALSE, id.name = "tbl_dict_val")
 
   tbl_ind_fmt <- rk.XML.dropdown("Format for Individual Files", options = list("Word (.docx)" = list(val = "docx", chk=TRUE), "PowerPoint (.pptx)" = list(val = "pptx"), "HTML (.html)" = list(val = "html"), "RDS" = list(val = "rds")), id.name = "tbl_ind_fmt")
   tbl_comb_fmt <- rk.XML.dropdown("Format for Combined Document", options = list("Word (.docx)" = list(val = "docx", chk=TRUE), "PowerPoint (.pptx)" = list(val = "pptx"), "RDS (.rds)" = list(val = "rds")), id.name = "tbl_comb_fmt")

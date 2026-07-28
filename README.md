@@ -1,6 +1,6 @@
 # rk.exporter: Batch Plot and Table Exporting for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.3-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.0.4-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.exporter/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.exporter/actions/workflows/lintr.yml)
@@ -8,6 +8,14 @@
 **rk.exporter** brings seamless, automated batch exporting capabilities to the RKWard GUI. Stop wasting hours manually exporting plots one by one or copy-pasting tables into Microsoft Office. 
 
 Powered by `purrr`, `flextable`, and `officer`, this plugin suite allows you to take a List of `ggplot2` objects or `flextables` and instantly export them as hundreds of individual high-res files, or compile them directly into professional, multi-page Word documents, PDFs, or PowerPoint presentations.
+
+## 🚀 What's New in Version 0.0.4
+
+This update brings critical bug fixes and hardens the core engine to ensure a smoother, error-free user experience:
+
+* **🐛 UI Logic & "Submit" Bug Fix:** Resolved a strict-validation bug where the "Submit" button would remain permanently disabled (greyed out) when trying to export. The Dictionary inputs now dynamically toggle their required state only when the "Dictionary Naming" strategy is explicitly selected.
+* **✅ Flawless Single-Object Exporting:** Hardened the internal wrapping logic for single objects. You don't need to manually create lists anymore; if you drop a single `ggplot` or `flextable` into the target slot, the engine instantly detects it, wraps it, preserves its exact workspace name, and exports it smoothly as an individual file.
+* **⚙️ Stability Improvements:** Minor cleanups in the generated R and JavaScript syntax to prevent dangling brackets and redundant validation checks.
 
 ## 🚀 What's New in Version 0.0.3
 
