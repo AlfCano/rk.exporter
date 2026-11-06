@@ -37,7 +37,7 @@
 			<tabbook>
 				<tab label="Input &amp; Mode" id="tab_InputMod">
 					<column id="clm_vTL2EMIF12">
-						<varslot id="plt_list" label="Target object (List of ggplot2 objects or single ggplot)" source="var_sel_plt" required="true" />
+						<varslot id="plt_list" label="Target object (List of ggplot2/recordedplot objects or single plot)" source="var_sel_plt" required="true" />
 						<radio id="plt_mode" label="Export Mode">
 							<option label="Individual Files (e.g. plot_1.svg, plot_2.svg)" value="ind" checked="true" />
 							<option label="Combined Document (1 plot per page/slide)" value="comb" />
